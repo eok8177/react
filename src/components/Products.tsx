@@ -1,26 +1,12 @@
-import { useEffect, useState } from "react";
-import Card from "./Card";
-import { ProductType } from "@/types/ProductType";
+import { Suspense } from "react";
+import Loading from "./Loading";
+import ProductsList from "./ProductsList";
 
 const Products: React.FC = () => {
-  const [products, setProducts] = useState<ProductType[]>([]);
-
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/products?limit=18")
-      .then((res) => res.json())
-      .then((json) => setProducts(json));
-  }, []);
-
   return (
-    <>
-      <div className="grid">
-        {
-          products.length ? products.map((product) => (
-            <Card product={product} key={product.id} />
-          )) : <>Loading...</>
-        }
-      </div>
-    </>
+    <Suspense fallback={<Loading />}>
+      <ProductsList />
+    </Suspense>
   );
 };
 

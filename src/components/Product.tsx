@@ -1,30 +1,21 @@
-import { ProductType } from "@/types/ProductType";
-import { useEffect, useState } from "react";
+import { Suspense, useMemo } from "react";
 import { useParams } from "react-router";
+import { fetchProduct } from "@/services/productService";
+import Loading from "./Loading";
+import ProductView from "./ProductView";
 
 const Product: React.FC = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState<ProductType>();
-
-  useEffect(() => {
-    fetch(`https://fakestoreapi.com/products/${id}`)
-      .then((res) => res.json())
-      .then((json) => setProduct(json));
-  }, []);
+  
+  const productResource = useMemo(
+    () => fetchProduct(id!),
+    [id] // Only re-create resource when id changes
+  );
 
   return (
-    <>
-      {product ? (
-        <div className="product-view">
-          <h1>{product?.title}</h1>
-          <img src={product?.image} alt={product?.title} />
-          <p>{product?.description}</p>
-          <p>${product?.price}</p>
-        </div>
-      ) : (
-        <>Loading...</>
-      )}
-    </>
+    <Suspense fallback={<Loading />}>
+      <ProductView productResource={productResource} />
+    </Suspense>
   );
 };
 

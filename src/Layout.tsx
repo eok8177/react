@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import reactLogo from "/assets/react.svg";
 import viteLogo from "/assets/vite.svg";
 
@@ -11,7 +12,7 @@ const Layout: React.FC<{children: React.ReactNode}> = ({children}) => {
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
-        <a href="/">Products</a>
+        <Link to="/">Products</Link>
       </div>
 
       {children}

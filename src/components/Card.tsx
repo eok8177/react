@@ -8,7 +8,11 @@ const Card: React.FC<{product: ProductType}> = ({product}) => {
         <img src={product.image} alt={product.title} />
       </Link>
       <div>
-        <h2>{product.title}</h2>
+        <h2>
+          <Link to={`/product/${product.id}`}>
+            {product.title}
+          </Link>
+        </h2>
         <p className="price">$ {product.price}</p>
       </div>
     </div>
