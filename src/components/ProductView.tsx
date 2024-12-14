@@ -12,7 +12,7 @@ const ProductView: React.FC<ProductViewProps> = ({ productResource }) => {
   return (
     <div className="product-view">
       <h1>{product.title}</h1>
-      <img src={product.image} alt={product.title} />
+      <img src={product.image} alt={product.title} height={300} />
       <p>{product.description}</p>
       <p>${product.price}</p>
     </div>

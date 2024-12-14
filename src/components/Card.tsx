@@ -5,7 +5,7 @@ const Card: React.FC<{product: ProductType}> = ({product}) => {
   return (
     <div className="card">
       <Link to={`/product/${product.id}`}>
-        <img src={product.image} alt={product.title} />
+        <img src={product.image} alt={product.title} height={300} />
       </Link>
       <div>
         <h2>
