@@ -1,7 +1,7 @@
 import type { ProductType } from "@/types/ProductType.ts";
 import { Link } from "react-router";
 
-const Card: React.FC<{product: ProductType}> = ({product}) => {
+const Card: React.FC<{ product: ProductType }> = ({ product }) => {
   return (
     <div className="card">
       <Link to={`/product/${product.id}`}>
@@ -9,14 +9,12 @@ const Card: React.FC<{product: ProductType}> = ({product}) => {
       </Link>
       <div>
         <h2>
-          <Link to={`/product/${product.id}`}>
-            {product.title}
-          </Link>
+          <Link to={`/product/${product.id}`}>{product.title}</Link>
         </h2>
         <p className="price">$ {product.price}</p>
       </div>
     </div>
   );
-}
+};
 
 export default Card;

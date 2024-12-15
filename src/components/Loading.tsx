@@ -1,5 +1,10 @@
 const Loading: React.FC = () => {
-  return <>🌀 Loading...</>;
+  return (
+    <div className="loader">
+      <span className="spinner"></span>
+      <span>Loading...</span>
+    </div>
+  );
 };
 
 export default Loading;

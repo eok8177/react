@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
+
 import "@/assets/index.scss";
 import Layout from "@/Layout";
 import Product from "@/components/Product";

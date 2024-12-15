@@ -1,65 +1,34 @@
+import { useQuery } from "@tanstack/react-query";
 import { ProductType } from "@/types/ProductType";
 
-export function createResource<T>(promise: Promise<T>) {
-  let status = 'pending';
-  let result: T;
-  let suspender = promise
-    .then(data => {
-      status = 'success';
-      result = data;
-    })
-    .catch(error => {
-      status = 'error';
-      result = error;
-    });
+const API_URL = "https://fakestoreapi.com/products";
 
-  return {
-    read() {
-      if (status === 'pending') {
-        throw suspender;
-      } else if (status === 'error') {
-        throw result;
-      } else {
-        return result;
-      }
-    }
-  };
-}
-
-interface CacheEntry {
-  resource: ReturnType<typeof createResource<ProductType>>;
-  timestamp: number;
-}
-
-// Cache for product resources
-const productCache = new Map<string, CacheEntry>();
-
-// Products list cache
-const productsListCache = createResource<ProductType[]>(
-  fetch("https://fakestoreapi.com/products?limit=18")
-    .then(res => res.json())
-);
-
-export function fetchProducts() {
-  return productsListCache;
-}
-
-export function fetchProduct(id: string) {
-  const now = Date.now();
-  const cached = productCache.get(id);
-  const CACHE_DURATION = 30000; // 30 seconds
-
-  // Use cached version if it exists and is fresh
-  if (cached && (now - cached.timestamp) < CACHE_DURATION) {
-    return cached.resource;
+async function getProducts(): Promise<ProductType[]> {
+  const response = await fetch(`${API_URL}?limit=18`);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
   }
+  return response.json();
+}
 
-  // Create new resource and update cache
-  const resource = createResource<ProductType>(
-    fetch(`https://fakestoreapi.com/products/${id}`)
-      .then(res => res.json())
-  );
+async function getProduct(id: string): Promise<ProductType> {
+  const response = await fetch(`${API_URL}/${id}`);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+}
 
-  productCache.set(id, { resource, timestamp: now });
-  return resource;
+export function useProducts() {
+  return useQuery<ProductType[], Error>({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  });
+}
+
+export function useProduct(id: string) {
+  return useQuery<ProductType, Error>({
+    queryKey: ["product", id],
+    queryFn: () => getProduct(id),
+  });
 }
